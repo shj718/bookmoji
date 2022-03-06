@@ -37,14 +37,14 @@ public class UserService {
 
     //POST
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
-        //중복
+        //중복 검사 - Provider 이용!
         if(userProvider.checkEmail(postUserReq.getEmail()) ==1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
 
         String pwd;
         try{
-            //암호화
+            //암호화 - 5주차
             pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());
             postUserReq.setPassword(pwd);
         } catch (Exception ignored) {
@@ -53,7 +53,7 @@ public class UserService {
         try{
             int userIdx = userDao.createUser(postUserReq);
             //jwt 발급.
-            String jwt = jwtService.createJwt(userIdx);
+            String jwt = jwtService.createJwt(userIdx); // 5주차
             return new PostUserRes(jwt,userIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

@@ -19,7 +19,7 @@ public class BaseResponse<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
 
-    // 요청에 성공한 경우
+    // 요청에 성공한 경우 - 생성자
     public BaseResponse(T result) {
         this.isSuccess = SUCCESS.isSuccess();
         this.message = SUCCESS.getMessage();
@@ -27,7 +27,7 @@ public class BaseResponse<T> {
         this.result = result;
     }
 
-    // 요청에 실패한 경우
+    // 요청에 실패한 경우 - 생성자
     public BaseResponse(BaseResponseStatus status) {
         this.isSuccess = status.isSuccess();
         this.message = status.getMessage();
