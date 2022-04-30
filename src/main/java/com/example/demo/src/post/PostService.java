@@ -37,20 +37,56 @@ public class PostService {
     public PostPostRes createPost(PostPostReq postPostReq) throws BaseException {
         try{
             int postIdx = postDao.createPost(postPostReq);
-            int contentNum = postDao.createContent(postIdx, postPostReq);
+            int numOfContents = 0;
+            for(int i=0; i<postPostReq.getPostContents().size(); i++) {
+                numOfContents += postDao.createContent(postIdx, postPostReq.getPostContents().get(i),postPostReq.getContentType());
+            }
 
-            return new PostPostRes((long)postIdx, contentNum);
+            // int contentIdx = postDao.createContent(postIdx, postPostReq);
+
+            return new PostPostRes((long)postIdx, numOfContents);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     // 게시물 수정
-    public void modifyPostText(PatchPostReq patchPostReq) throws BaseException {
+    public void modifyPostText(int userId, PatchPostReq patchPostReq) throws BaseException {
         try{
-            int result = postDao.modifyPostText(patchPostReq);
+            int result = postDao.modifyPostText(userId, patchPostReq);
             if(result == 0){
-                throw new BaseException(FAILED_TO_MODIFY_POST); // 사용자가 게시물 작성자가 아니라면 에러
+                throw new BaseException(DATABASE_ERROR);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 좋아요 생성
+    public void createLike(Like like) throws BaseException {
+        try {
+            if(postProvider.checkPostLike(like) == 1) { // 이미 해당 게시물에 좋아요를 누른 경우
+                throw new BaseException(DATABASE_ERROR);
+            }
+            int result = postDao.createLike(like);
+            if(result == 0){
+                throw new BaseException(DATABASE_ERROR); // 게시물이 존재하지 않는 경우
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+    // 좋아요 삭제
+    public void deleteLike(Like like) throws BaseException {
+        try {
+            if(postProvider.checkPostLike(like) == 0) { // 해당 게시물에 좋아요를 누른적이 없는 경우
+                throw new BaseException(DATABASE_ERROR);
+            }
+            int result = postDao.deleteLike(like);
+            if(result == 0) {
+                throw new BaseException(DATABASE_ERROR);
             }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);

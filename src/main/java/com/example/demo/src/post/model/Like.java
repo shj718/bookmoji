@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetPostRes {
-    private long postId;
-    private String firstContentUrlPerPost;
-    private String firstContentTypePerPost;
+public class Like {
+    public long postId;
+    public int userId;
 }

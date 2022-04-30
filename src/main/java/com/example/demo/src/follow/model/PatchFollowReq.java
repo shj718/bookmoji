@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PatchFollowReq {
-    private long fromUserId;
-    private long toUserId;
+    private int fromUserId;
+    private int toUserId;
 }

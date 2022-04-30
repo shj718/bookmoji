@@ -20,8 +20,8 @@ public class FollowDao {
     }
 
 
-    public int checkFollow(long fromUserId, long toUserId) {
-        String checkFollowQuery = "select exists(select following from Follow where follower = ? AND following = ? AND status = 'active')";
+    public int checkFollow(int fromUserId, int toUserId) {
+        String checkFollowQuery = "select exists(select following from Follow where follower = ? and following = ? and status = 'active')";
         Object[] checkFollowParams = new Object[] {fromUserId, toUserId};
         return this.jdbcTemplate.queryForObject(checkFollowQuery,
                 int.class,
@@ -35,8 +35,8 @@ public class FollowDao {
     }
 
     // 팔로워 리스트
-    public List<GetFollowerRes> getFollowers(long userId) {
-        String getFollowersQuery = "select userName, " +
+    public List<GetFollowerRes> getFollowers(int userId) {
+        String getFollowersQuery = "select u_id, userName, " +
                 "       name, " +
                 "       profileImgUrl, " +
                 "       if(u_id in (select u_id " +
@@ -51,8 +51,8 @@ public class FollowDao {
                 "          'notSeen') as seenOrNotSeenLatestStory, " +
                 "       'follow'         as followEachOther " +
                 "from User " +
-                "where User.u_id in (select follower from Follow where following = ? AND status = 'active') " +
-                "  and User.u_id in (select following from Follow where follower = ? AND status = 'active') AND User.status = 'active'" +
+                "where User.u_id in (select follower from Follow where following = ? and status = 'active') " +
+                "  and User.u_id in (select following from Follow where follower = ? and status = 'active') and User.status = 'active'" +
                 "union " +
                 "select userName, " +
                 "       name, " +
@@ -69,11 +69,12 @@ public class FollowDao {
                 "          'notSeen') as seenOrNotSeenLatestStory, " +
                 "       ''            as followEachOther " +
                 "from User " +
-                "where User.u_id in (select follower from Follow where following = ? AND status = 'active') " +
-                "  and User.u_id not in (select following from Follow where follower = ? AND status = 'active') AND User.status = 'active'";
+                "where User.u_id in (select follower from Follow where following = ? and status = 'active') " +
+                "  and User.u_id not in (select following from Follow where follower = ? and status = 'active') and User.status = 'active'";
         Object[] getFollowersParams = new Object[]{userId, userId, userId, userId};
         return this.jdbcTemplate.query(getFollowersQuery,
                 (rs, rowNum) -> new GetFollowerRes(
+                        rs.getInt("u_id"),
                         rs.getString("userName"),
                         rs.getString("name"),
                         rs.getString("profileImgUrl"),
@@ -83,8 +84,8 @@ public class FollowDao {
     }
 
     // 팔로잉 리스트
-    public List<GetFollowingRes> getFollowings(long userId) {
-        String getFollowingsQuery = "select userName, " +
+    public List<GetFollowingRes> getFollowings(int userId) {
+        String getFollowingsQuery = "select u_id, userName, " +
                 "       name, " +
                 "       profileImgUrl, " +
                 "       if(u_id in (select u_id " +
@@ -98,10 +99,11 @@ public class FollowDao {
                 "                                        group by u_id) latestStoryPerUser on s_id = story_id), 'seen', " +
                 "          'notSeen') as seenOrNotSeenLatestStory " +
                 "from User " +
-                "where User.u_id in (select following from Follow where follower = ? AND status = 'active') AND User.status = 'active'";
-        long getFollowingsParams = userId;
+                "where User.u_id in (select following from Follow where follower = ? and status = 'active') and User.status = 'active'";
+        int getFollowingsParams = userId;
         return this.jdbcTemplate.query(getFollowingsQuery,
                 (rs, rowNum) -> new GetFollowingRes(
+                        rs.getInt("u_id"),
                         rs.getString("userName"),
                         rs.getString("name"),
                         rs.getString("profileImgUrl"),
@@ -111,9 +113,8 @@ public class FollowDao {
 
     // 언팔로우
     public int deleteFollow(PatchFollowReq patchFollowReq) {
-        String deleteFollowQuery = "update Follow set status = 'deactivated' where follower = ? AND following = ? ";
+        String deleteFollowQuery = "update Follow set status = 'deleted' where follower = ? and following = ? ";
         Object[] deleteFollowParams = new Object[]{patchFollowReq.getFromUserId(), patchFollowReq.getToUserId()};
         return this.jdbcTemplate.update(deleteFollowQuery,deleteFollowParams);
     }
-
 }

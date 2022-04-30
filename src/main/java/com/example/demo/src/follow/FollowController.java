@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.follow.model.*;
-// import com.example.demo.utils.JwtService;
+import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 
 import static com.example.demo.config.BaseResponseStatus.*;
-// import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
 @RestController
 @RequestMapping("/app/follows")
@@ -26,10 +26,13 @@ public class FollowController {
     private final FollowProvider followProvider;
     @Autowired
     private final FollowService followService;
+    @Autowired
+    private final JwtService jwtService;
 
-    public FollowController(FollowProvider followProvider, FollowService followService) {
+    public FollowController(FollowProvider followProvider, FollowService followService, JwtService jwtService) {
         this.followProvider = followProvider;
         this.followService = followService;
+        this.jwtService = jwtService;
     }
 
 
@@ -43,6 +46,15 @@ public class FollowController {
     @PostMapping("")
     public BaseResponse<String> createFollow(@RequestBody PostFollowReq postFollowReq) {
         try {
+            if(postFollowReq.getFromUserId() == 0 || postFollowReq.getToUserId() == 0) {
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+            int userId = postFollowReq.getFromUserId();
+            //jwt 에서 idx 추출.
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT); //userId와 접근한 유저가 같은지 확인
+            }
             followService.createFollow(postFollowReq);
             String result = "";
             return new BaseResponse<>(result);
@@ -58,8 +70,13 @@ public class FollowController {
      */
     @ResponseBody
     @GetMapping("/followed-by")
-    public BaseResponse<List<GetFollowerRes>> getFollowers(@RequestParam long userId) {
+    public BaseResponse<List<GetFollowerRes>> getFollowers(@RequestParam int userId) {
         try{
+            //jwt 에서 idx 추출.
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT); //userId와 접근한 유저가 같은지 확인
+            }
             List<GetFollowerRes> getFollowersRes = followProvider.getFollowers(userId);
             return new BaseResponse<>(getFollowersRes);
         } catch(BaseException exception){
@@ -74,8 +91,13 @@ public class FollowController {
     */
     @ResponseBody
     @GetMapping("/following")
-    public BaseResponse<List<GetFollowingRes>> getFollowings(@RequestParam long userId) {
+    public BaseResponse<List<GetFollowingRes>> getFollowings(@RequestParam int userId) {
         try{
+            //jwt 에서 idx 추출.
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT); //userId와 접근한 유저가 같은지 확인
+            }
             List<GetFollowingRes> getFollowingsRes = followProvider.getFollowings(userId);
             return new BaseResponse<>(getFollowingsRes);
 
@@ -93,6 +115,15 @@ public class FollowController {
     @PatchMapping("")
     public BaseResponse<String> deleteFollow(@RequestBody PatchFollowReq patchFollowReq) {
         try {
+            if(patchFollowReq.getFromUserId() == 0 || patchFollowReq.getToUserId() == 0) {
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+            int userId = patchFollowReq.getFromUserId();
+            //jwt 에서 idx 추출.
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT); //userId와 접근한 유저가 같은지 확인
+            }
             followService.deleteFollow(patchFollowReq);
             String result = "";
             return new BaseResponse<>(result);
@@ -100,6 +131,4 @@ public class FollowController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
-
 }

@@ -28,7 +28,7 @@ public class FollowProvider {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public int checkFollow(long fromUserId, long toUserId) throws BaseException {
+    public int checkFollow(int fromUserId, int toUserId) throws BaseException {
         try{
             return followDao.checkFollow(fromUserId, toUserId);
         } catch (Exception exception){
@@ -36,7 +36,7 @@ public class FollowProvider {
         }
     }
 
-    public List<GetFollowerRes> getFollowers(long userId) throws BaseException {
+    public List<GetFollowerRes> getFollowers(int userId) throws BaseException {
         try{
             List<GetFollowerRes> getFollowersRes = followDao.getFollowers(userId);
             return getFollowersRes;
@@ -45,7 +45,7 @@ public class FollowProvider {
         }
     }
 
-    public List<GetFollowingRes> getFollowings(long userId) throws BaseException {
+    public List<GetFollowingRes> getFollowings(int userId) throws BaseException {
         try{
             List<GetFollowingRes> getFollowingsRes = followDao.getFollowings(userId);
             return getFollowingsRes;

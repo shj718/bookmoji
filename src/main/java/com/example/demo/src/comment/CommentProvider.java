@@ -27,8 +27,22 @@ public class CommentProvider {
         this.commentDao = commentDao;
     }
 
+
+    // 게시물 존재 여부 확인
+    public int checkCommentTarget(long postId) throws BaseException {
+        try {
+            return commentDao.checkCommentTarget(postId);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     // 댓글 조회
     public List<GetCommentRes> getComments(long postId) throws BaseException{
+        // 존재하는 게시물인지 확인 (존재하지 않으면 에러)
+        if(checkCommentTarget(postId) == 0) {
+            throw new BaseException(POST_NOT_EXISTS);
+        }
         try{
             List<GetCommentRes> getCommentsRes = commentDao.getComments(postId);
             return getCommentsRes;
@@ -40,6 +54,10 @@ public class CommentProvider {
 
     // 댓글 개수 조회
     public int getCommentsCount(long postId) throws BaseException{
+        // 존재하는 게시물인지 확인 (존재하지 않으면 에러)
+        if(checkCommentTarget(postId) == 0) {
+            throw new BaseException(POST_NOT_EXISTS);
+        }
         try{
             int result = commentDao.getCommentsCount(postId);
             return result;

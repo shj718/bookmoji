@@ -34,12 +34,12 @@ public class FollowService {
     public void createFollow(PostFollowReq postFollowReq) throws BaseException {
         // 이미 팔로잉하는 유저인지 체크 (디비에서 PK가 idx여서 중복값이 삽입될 수도 있기 때문)
         if(followProvider.checkFollow(postFollowReq.getFromUserId(),postFollowReq.getToUserId()) ==1){
-            throw new BaseException(FAILED_TO_FOLLOW);
+            throw new BaseException(DUPLICATED_FOLLOW);
         }
         try{
             int result = followDao.createFollow(postFollowReq);
             if(result == 0){
-                throw new BaseException(FAILED_TO_FOLLOW);
+                throw new BaseException(DATABASE_ERROR);
             }
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -52,7 +52,7 @@ public class FollowService {
         try{
             int result = followDao.deleteFollow(patchFollowReq);
             if(result == 0){
-                throw new BaseException(DELETE_FAIL_FOLLOW);
+                throw new BaseException(DATABASE_ERROR);
             }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);

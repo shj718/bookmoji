@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetFollowingRes {
+    private int userId;
     private String userName;
     private String name;
     private String profileImageUrl;

@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PatchPostReq {
-    private long userId;
     private long postId;
     private String text;
 }

@@ -9,5 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostPostRes {
     private long postIdx;
-    private int contentNum;
+    private int numOfContents;
 }

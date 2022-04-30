@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetCommentRes {
     private long commentId;
-    private long userId;
+    private int userId;
     private String text;
 }

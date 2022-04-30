@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetPostInfoRes {
     private long postId;
-    private long userId;
+    private int userId;
     private String text;
 }

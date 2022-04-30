@@ -49,12 +49,39 @@ public class PostProvider {
         }
     }
 
-    public List<GetPostRes> getFeedPosts(long userId) throws BaseException{
+    public List<GetPostRes> getFeedPosts(int userId) throws BaseException{
         try{
             List<GetPostRes> getFeedPostsRes = postDao.getFeedPosts(userId);
             return getFeedPostsRes;
         }
         catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetPostRes> getFollowPosts(int userId) throws BaseException{
+        try{
+            List<GetPostRes> getFollowPostsRes = postDao.getFollowPosts(userId);
+            return getFollowPostsRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkPostLike (Like like) throws BaseException {
+        try {
+            return postDao.checkPostLike(like);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetLikeCountRes getLikeCount(long postId) throws BaseException {
+        try {
+            GetLikeCountRes getLikeCountRes = postDao.getLikeCount(postId);
+            return getLikeCountRes;
+        } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }

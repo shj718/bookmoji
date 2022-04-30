@@ -17,6 +17,13 @@ public class CommentDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+
+    public int checkCommentTarget(long postId) {
+        String checkCommentTargetQuery = "select exists(select p_id from Post where p_id = ? and status = 'active')";
+        long checkCommentTargetParams = postId;
+        return this.jdbcTemplate.queryForObject(checkCommentTargetQuery, int.class, checkCommentTargetParams);
+    }
+
     public int createComment(PostCommentReq postCommentReq) {
         String createCommentQuery = "insert into Comment (text, u_id, target_id, previous) VALUES (?,?,?,?)";
         Object[] createCommentParams = new Object[]{postCommentReq.getText(),postCommentReq.getUserId(), postCommentReq.getPostId(), postCommentReq.getPrevCommentId()};
@@ -32,7 +39,7 @@ public class CommentDao {
         return this.jdbcTemplate.query(getCommentsQuery,
                 (rs,rowNum) -> new GetCommentRes(
                         rs.getLong("c_id"),
-                        rs.getLong("u_id"),
+                        rs.getInt("u_id"),
                         rs.getString("text")),
                 getCommentsParams);
     }
@@ -43,9 +50,9 @@ public class CommentDao {
         return this.jdbcTemplate.queryForObject(getCommentsCountQuery, int.class, getCommentsCountParams);
     }
 
-    public int deleteComment(long userId, long commentId) {
-        String deleteCommentQuery = "update Comment set status = 'deleted' where u_id = ? AND c_id = ? AND status = 'active'";
-        Object[] deleteCommentParams = new Object[]{userId, commentId};
+    public int deleteComment(PatchCommentReq patchCommentReq) {
+        String deleteCommentQuery = "update Comment set status = 'deleted' where u_id = ? and c_id = ? and status = 'active'";
+        Object[] deleteCommentParams = new Object[]{patchCommentReq.getUserId(), patchCommentReq.getCommentId()};
         return this.jdbcTemplate.update(deleteCommentQuery, deleteCommentParams);
     }
 

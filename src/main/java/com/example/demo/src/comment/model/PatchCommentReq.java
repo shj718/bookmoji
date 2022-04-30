@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatchCommentReq { // 댓글 수정 추가하기
-    private String text;
-    private long userId;
-    private long postId;
-    private long prevCommentId; // 널값 가능
+public class PatchCommentReq {
+    private int userId;
+    private long commentId;
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostCommentReq {
     private String text;
-    private long userId;
+    private int userId;
     private long postId;
-    private long prevCommentId; // 널값 가능
+    private long prevCommentId; // 요청으로 널값 가능
 }

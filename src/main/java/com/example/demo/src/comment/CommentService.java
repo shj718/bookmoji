@@ -34,6 +34,10 @@ public class CommentService {
 
     // 댓글 생성
     public PostCommentRes createComment(PostCommentReq postCommentReq) throws BaseException {
+        // 존재하는 게시물인지 확인 (존재하지 않으면 에러)
+        if(commentProvider.checkCommentTarget(postCommentReq.getPostId()) == 0) {
+            throw new BaseException(POST_NOT_EXISTS);
+        }
         try{
             int commentIdx = commentDao.createComment(postCommentReq);
             return new PostCommentRes(postCommentReq.getPostId(),(long)commentIdx);
@@ -43,14 +47,14 @@ public class CommentService {
     }
 
     // 댓글 삭제
-    public void deleteComment(long userId, long commentId) throws BaseException {
+    public void deleteComment(PatchCommentReq patchCommentReq) throws BaseException {
         try{
-            int result = commentDao.deleteComment(userId, commentId);
+            int result = commentDao.deleteComment(patchCommentReq);
             if(result == 0) {
                 throw new BaseException(FAILED_TO_DELETE_COMMENT); // 댓글 삭제 에러
             }
         } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_DELETE_COMMENT);
         }
     }
 
