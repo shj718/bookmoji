@@ -88,7 +88,7 @@ public class UserController {
     @ResponseBody
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
-        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요! (UserName, id, password 없는 경우도 내가 만들기!)
+        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
         if(postUserReq.getEmail() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
@@ -104,7 +104,7 @@ public class UserController {
         }
     }
     /**
-     * 로그인 API - 5주차
+     * 로그인 API
      * [POST] /users/logIn
      * @return BaseResponse<PostLoginRes>
      */
@@ -122,7 +122,7 @@ public class UserController {
     }
 
     /**
-     * 유저정보변경 API - 5주차
+     * 유저정보변경 API
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */

@@ -8,13 +8,13 @@ import lombok.Getter;
 @Getter
 public enum BaseResponseStatus {
     /**
-     * 1000 : 요청 성공 - 건들지 말기
+     * 1000 : 요청 성공
      */
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
 
 
     /**
-     * 2000 : Request 오류 (형식적 Validation - 컨트롤러가 처리) - 숫자 증가시켜서 추가하기
+     * 2000 : Request 오류
      */
     // Common
     REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),
@@ -33,7 +33,7 @@ public enum BaseResponseStatus {
 
 
     /**
-     * 3000 : Response 오류 (의미적 Validation - 서비스/프로바이더가 처리) - 숫자 증가시켜서 추가하기
+     * 3000 : Response 오류
      */
     // Common
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다."),
@@ -41,9 +41,6 @@ public enum BaseResponseStatus {
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
-    DUPLICATED_FOLLOW(false,3016,"이미 팔로잉하는 유저입니다."),
-    FAILED_TO_DELETE_COMMENT(false,3017,"댓글을 삭제할 수 없습니다."),
-    POST_NOT_EXISTS(false, 3018, "존재하지 않는 게시물입니다."),
 
 
 
