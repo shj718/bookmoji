@@ -31,35 +31,6 @@ public class UserProvider {
         this.jwtService = jwtService;
     }
 
-    public List<GetUserRes> getUsers() throws BaseException{
-        try{
-            List<GetUserRes> getUserRes = userDao.getUsers();
-            return getUserRes;
-        }
-        catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-    public List<GetUserRes> getUsersByEmail(String email) throws BaseException{
-        try{
-            List<GetUserRes> getUsersRes = userDao.getUsersByEmail(email);
-            return getUsersRes;
-        }
-        catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-                    }
-
-
-    public GetUserRes getUser(int userIdx) throws BaseException {
-        try {
-            GetUserRes getUserRes = userDao.getUser(userIdx);
-            return getUserRes;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
     public int checkEmail(String email) throws BaseException{
         try{
@@ -70,16 +41,26 @@ public class UserProvider {
     }
 
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
+        // 존재하지 않는 이메일인 경우 예외 처리
+        try {
+            User user = userDao.getPwd(postLoginReq);
+        } catch (Exception ignored) {
+            throw new BaseException(EMAIL_NOT_EXISTS);
+        }
         User user = userDao.getPwd(postLoginReq);
+        // 탈퇴한 유저인 경우 예외 처리
+        if(user.getStatus().equals("D")) {
+            throw new BaseException(INVALID_USER_STATUS);
+        }
         String password;
         try {
-            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(user.getPassword());
+            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(user.getPassword()); // 복호화
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
-        if(postLoginReq.getPassword().equals(password)){
-            int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
+        if(postLoginReq.getPassword().equals(password)){ // 비밀번호 비교
+            long userIdx = userDao.getPwd(postLoginReq).getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
             return new PostLoginRes(userIdx,jwt);
         }
@@ -89,4 +70,20 @@ public class UserProvider {
 
     }
 
+    public GetUserInfoRes getUserInfo(long userIdx) throws BaseException {
+        try {
+            GetUserInfoRes getUserInfoRes = userDao.getUserInfo(userIdx);
+            // 비밀번호를 그대로 주는 것이 아니라 복호화해서 주기
+            String password;
+            try { // 디비에 저장된 비밀번호 복호화
+                password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(getUserInfoRes.getPassword());
+            } catch (Exception ignored) {
+                throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+            }
+            getUserInfoRes.setPassword(password);
+            return getUserInfoRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

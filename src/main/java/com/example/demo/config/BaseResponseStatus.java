@@ -29,6 +29,22 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
+    POST_USERS_EMPTY_PASSWORD(false,2018,"비밀번호를 입력해주세요."),
+    POST_USERS_EMPTY_NICKNAME(false,2019,"닉네임을 입력해주세요."),
+    PATCH_EMPTY_NICKNAME(false,2020,"변경할 닉네임을 입력해주세요."),
+    PATCH_EMPTY_CURRENT_PASSWORD(false,2021,"현재 비밀번호를 입력해주세요."),
+    PATCH_EMPTY_NEW_PASSWORD(false,2022,"새 비밀번호를 입력해주세요."),
+    EMPTY_PROFILE_IMAGE(false,2023,"프로필 이미지 Url을 입력해주세요."),
+    EMPTY_EMOJI(false,2024,"이모지를 입력해주세요."), // 차후에 영화에도 사용 가능
+    EMPTY_REVIEW_TEXT(false,2025,"감상 글을 입력해주세요."), // 차후에 영화에도 사용 가능
+    EMPTY_ISBN(false,2026,"책의 ISBN을 입력해주세요."),
+    EMPTY_BOOK_TITLE(false,2027,"책 제목을 입력해주세요."),
+    EMPTY_THUMBNAIL(false,2028,"썸네일 Url을 입력해주세요."), // 차후에 영화에도 사용 가능
+    EMPTY_AUTHOR(false,2029,"지은이를 입력해주세요."),
+    EMPTY_PUBLISHER(false,2030,"출판사를 입력해주세요."),
+    EMPTY_BOOK_INTRODUCTION(false,2031,"책 소개를 입력해주세요."),
+    EMPTY_BOOK_RELEASE_YEAR(false,2032,"출판 연도를 입력해주세요."),
+
 
 
 
@@ -40,7 +56,13 @@ public enum BaseResponseStatus {
 
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
-    FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
+    FAILED_TO_LOGIN(false,3014,"비밀번호가 틀렸습니다."),
+    EMAIL_NOT_EXISTS(false,3015,"가입되지 않은 이메일입니다."),
+    INVALID_USER_STATUS(false,3016,"탈퇴한 회원입니다."),
+    WRONG_CURRENT_PASSWORD(false,3017,"현재 비밀번호가 틀렸습니다."),
+    FAILED_TO_MODIFY_PASSWORD(false,3018,"변경하려는 비밀번호가 현재 비밀번호와 일치합니다."),
+    REVIEW_NOT_EXISTS(false,3019,"유저가 작성한 감상이 없습니다."),
+    INVALID_USER_REVIEW_INDEX(false,3020,"해당 유저 또는 감상 고유번호의 정보가 존재하지 않습니다."),
 
 
 

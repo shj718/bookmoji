@@ -55,7 +55,8 @@ dependencies {
 
 
 
-
+    // CORS
+    testImplementation 'org.apache.httpcomponents:httpclient'
 
 }
 
