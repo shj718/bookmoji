@@ -1,5 +1,7 @@
 com/example/demo/src/review/model/PostReviewReq.java
  com.example.demo.src.review.model.PostReviewReq
+com/example/demo/src/like/LikeProvider.java
+ com.example.demo.src.like.LikeProvider
 com/example/demo/src/review/model/GetReviewRes.java
  com.example.demo.src.review.model.GetReviewRes
 com/example/demo/src/user/model/PostUserReq.java
@@ -20,6 +22,8 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
+com/example/demo/src/review/model/PatchReviewReq.java
+ com.example.demo.src.review.model.PatchReviewReq
 com/example/demo/src/review/ReviewController.java
  com.example.demo.src.review.ReviewController
 com/example/demo/src/review/model/GetReviewDetailRes.java
@@ -32,16 +36,22 @@ com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
 com/example/demo/src/review/ReviewProvider.java
  com.example.demo.src.review.ReviewProvider
+com/example/demo/src/like/LikeDao.java
+ com.example.demo.src.like.LikeDao
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
+com/example/demo/src/like/LikeController.java
+ com.example.demo.src.like.LikeController
 com/example/demo/src/user/model/PatchNicknameReq.java
  com.example.demo.src.user.model.PatchNicknameReq
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/src/like/LikeService.java
+ com.example.demo.src.like.LikeService
 com/example/demo/src/user/model/PatchProfileImageReq.java
  com.example.demo.src.user.model.PatchProfileImageReq
 com/example/demo/config/BaseException.java

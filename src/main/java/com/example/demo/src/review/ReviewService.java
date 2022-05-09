@@ -61,4 +61,50 @@ public class ReviewService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    @Transactional
+    public void modifyReview(PatchReviewReq patchReviewReq) throws BaseException {
+        // 해당 유저의 해당 리뷰가 존재하는지 체크
+        int userReviewExists;
+        try {
+            userReviewExists = reviewProvider.checkUserReview(patchReviewReq.getUserIdx(), patchReviewReq.getReviewIdx());
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(userReviewExists == 0) { // 없으면 에러
+            throw new BaseException(INVALID_USER_REVIEW_INDEX);
+        }
+        // 있으면 수정
+        try {
+            int result = reviewDao.modifyReview(patchReviewReq);
+            if(result == 0) {
+                throw new BaseException(DATABASE_ERROR);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Transactional
+    public void deleteReview(long userIdx, long reviewIdx) throws BaseException {
+        // 해당 유저의 해당 리뷰가 존재하는지 체크
+        int userReviewExists;
+        try {
+            userReviewExists = reviewProvider.checkUserReview(userIdx, reviewIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(userReviewExists == 0) { // 없으면 에러
+            throw new BaseException(INVALID_USER_REVIEW_INDEX);
+        }
+        // 있으면 삭제
+        try {
+            int result = reviewDao.deleteReview(reviewIdx);
+            if(result == 0) {
+                throw new BaseException(DATABASE_ERROR);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

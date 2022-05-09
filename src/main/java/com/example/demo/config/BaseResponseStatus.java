@@ -63,6 +63,9 @@ public enum BaseResponseStatus {
     FAILED_TO_MODIFY_PASSWORD(false,3018,"변경하려는 비밀번호가 현재 비밀번호와 일치합니다."),
     REVIEW_NOT_EXISTS(false,3019,"유저가 작성한 감상이 없습니다."),
     INVALID_USER_REVIEW_INDEX(false,3020,"해당 유저 또는 감상 고유번호의 정보가 존재하지 않습니다."),
+    TARGET_REVIEW_NOT_EXISTS(false,3021,"존재하지 않는 감상입니다."),
+    DUPLICATED_LIKE(false,3022,"이미 공감한 감상입니다."),
+    FAILED_TO_DELETE_LIKE(false,3023,"유저가 감상에 공감하지 않았습니다."),
 
 
 

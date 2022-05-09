@@ -128,4 +128,18 @@ public class ReviewDao {
                         rs.getString("releaseYear")),
                 getReviewDetailParams);
     }
+
+    public int modifyReview(PatchReviewReq patchReviewReq) {
+        String modifyReviewQuery = "update Review set emoji = ?, text = ? where id = ?";
+        Object[] modifyReviewParams = new Object[]{patchReviewReq.getEmoji(), patchReviewReq.getText(), patchReviewReq.getReviewIdx()};
+
+        return this.jdbcTemplate.update(modifyReviewQuery, modifyReviewParams);
+    }
+
+    public int deleteReview(long reviewIdx) {
+        String deleteReviewQuery = "update Review set status = 'D' where id = ?";
+        long deleteReviewParams = reviewIdx;
+
+        return this.jdbcTemplate.update(deleteReviewQuery, deleteReviewParams);
+    }
 }

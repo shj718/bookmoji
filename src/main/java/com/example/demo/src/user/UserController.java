@@ -30,7 +30,6 @@ public class UserController {
 
 
 
-
     public UserController(UserProvider userProvider, UserService userService, JwtService jwtService){
         this.userProvider = userProvider;
         this.userService = userService;

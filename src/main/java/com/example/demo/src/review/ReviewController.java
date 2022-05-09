@@ -132,4 +132,58 @@ public class ReviewController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 리뷰 수정 API
+     * [PATCH] /reviews/contents
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/contents")
+    public BaseResponse<String> modifyReview(@RequestBody PatchReviewReq patchReviewReq) {
+        try {
+            long userIdx = patchReviewReq.getUserIdx();
+            //jwt에서 idx 추출.
+            long userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            // 형식적 validation
+            if(patchReviewReq.getEmoji() == null) {
+                return new BaseResponse<>(EMPTY_EMOJI);
+            }
+            if(patchReviewReq.getText() == null) {
+                return new BaseResponse<>(EMPTY_REVIEW_TEXT);
+            }
+            reviewService.modifyReview(patchReviewReq);
+            String result = "감상 수정 성공";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 리뷰 삭제 API
+     * [PATCH] /reviews
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("")
+    public BaseResponse<String> deleteReview(@RequestParam long userIdx, @RequestParam long reviewIdx) {
+        try {
+            //jwt에서 idx 추출.
+            long userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            reviewService.deleteReview(userIdx, reviewIdx);
+            String result = "감상 삭제 성공";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
