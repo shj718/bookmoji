@@ -63,6 +63,17 @@ public class UserService {
 
     @Transactional
     public void modifyNickname(PatchNicknameReq patchNicknameReq) throws BaseException {
+        // 변경하려는 닉네임이 현재 닉네임과 다른지 검사
+        String currentNickname;
+        try {
+            currentNickname = userProvider.getUserInfo(patchNicknameReq.getUserIdx()).getNickname();
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(currentNickname.equals(patchNicknameReq.getNickname())) {
+            throw new BaseException(FAILED_TO_MODIFY_NICKNAME);
+        }
+        // 닉네임 변경
         try {
             int result = userDao.modifyNickname(patchNicknameReq);
             if(result == 0) {

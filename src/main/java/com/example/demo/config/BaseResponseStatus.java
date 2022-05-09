@@ -66,6 +66,7 @@ public enum BaseResponseStatus {
     TARGET_REVIEW_NOT_EXISTS(false,3021,"존재하지 않는 감상입니다."),
     DUPLICATED_LIKE(false,3022,"이미 공감한 감상입니다."),
     FAILED_TO_DELETE_LIKE(false,3023,"유저가 감상에 공감하지 않았습니다."),
+    FAILED_TO_MODIFY_NICKNAME(false,3024,"변경하려는 닉네임이 현재 닉네임과 일치합니다."),
 
 
 
