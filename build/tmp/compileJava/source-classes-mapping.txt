@@ -16,6 +16,8 @@ com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
+com/example/demo/src/review/model/GetOtherReviewRes.java
+ com.example.demo.src.review.model.GetOtherReviewRes
 com/example/demo/utils/AES128.java
  com.example.demo.utils.AES128
 com/example/demo/config/BaseResponseStatus.java
@@ -46,6 +48,8 @@ com/example/demo/src/like/LikeController.java
  com.example.demo.src.like.LikeController
 com/example/demo/src/user/model/PatchNicknameReq.java
  com.example.demo.src.user.model.PatchNicknameReq
+com/example/demo/src/review/model/OtherReview.java
+ com.example.demo.src.review.model.OtherReview
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/user/UserService.java

@@ -142,4 +142,47 @@ public class ReviewDao {
 
         return this.jdbcTemplate.update(deleteReviewQuery, deleteReviewParams);
     }
+
+    public int checkOtherReview(long userIdx) {
+        String checkOtherReviewQuery = "select exists(select id from Review where status = 'A' and userId != ?)";
+        long checkOtherReviewParams = userIdx;
+
+        return this.jdbcTemplate.queryForObject(checkOtherReviewQuery,
+                int.class,
+                checkOtherReviewParams);
+    }
+
+    public List<OtherReview> getOtherReviewsTmp(long userIdx) { // 일단은 최신순 6개
+        String getOtherReviewsTmpQuery = "select reviewIdx, emoji, text, isbn, title, thumbnailUrl, author " +
+                "from (select id as reviewIdx, emoji, text, bookId " +
+                "      from Review " +
+                "      where userId != ? " +
+                "        and status = 'A') Reviews " +
+                "         inner join (select id, isbn, title, thumbnailUrl, author " +
+                "                     from Book " +
+                "                     where status = 'A') Books " +
+                "                    on Reviews.bookId = Books.id " +
+                "order by reviewIdx desc limit 6";
+        long getOtherReviewsTmpParams = userIdx;
+
+        return this.jdbcTemplate.query(getOtherReviewsTmpQuery,
+                (rs,rowNum) -> new OtherReview(
+                        rs.getLong("reviewIdx"),
+                        rs.getString("emoji"),
+                        rs.getString("text"),
+                        rs.getString("isbn"),
+                        rs.getString("title"),
+                        rs.getString("thumbnailUrl"),
+                        rs.getString("author")),
+                getOtherReviewsTmpParams);
+    }
+
+    public int getLikedOrNot(long userIdx, long reviewIdx) {
+        String getLikedOrNotQuery = "select exists(select id from Likes where userId = ? and reviewId = ? and status = 'A')";
+        Object[] getLikedOrNotParams = new Object[]{userIdx, reviewIdx};
+
+        return this.jdbcTemplate.queryForObject(getLikedOrNotQuery,
+                int.class,
+                getLikedOrNotParams);
+    }
 }

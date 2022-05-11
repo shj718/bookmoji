@@ -186,4 +186,26 @@ public class ReviewController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 다른 유저들의 리뷰 조회 API (유저가 해당 리뷰에 좋아요했는지 여부가 표시되어야함)
+     * [GET] /reviews/others
+     * @return BaseResponse<List<GetOtherReviewRes>>
+     */
+    @ResponseBody
+    @GetMapping("/others")
+    public BaseResponse<List<GetOtherReviewRes>> getOtherReviews(@RequestParam long userIdx) {
+        try {
+            //jwt에서 idx 추출.
+            long userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            List<GetOtherReviewRes> getOtherReviewsRes = reviewProvider.getOtherReviews(userIdx);
+            return new BaseResponse<>(getOtherReviewsRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

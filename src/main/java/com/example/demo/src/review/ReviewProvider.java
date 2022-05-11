@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -100,6 +101,48 @@ public class ReviewProvider {
         try {
             GetReviewDetailRes getReviewDetailRes = reviewDao.getReviewDetail(reviewIdx);
             return getReviewDetailRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkOtherReview(long userIdx) throws BaseException {
+        try {
+            int result = reviewDao.checkOtherReview(userIdx);
+            return result;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetOtherReviewRes> getOtherReviews(long userIdx) throws BaseException {
+        // 디비에 리뷰가 하나라도 있는지 검사
+        int reviewExists;
+        try {
+            reviewExists = checkOtherReview(userIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(reviewExists == 0) {
+            throw new BaseException(GET_OTHER_REVIEWS_FAIL);
+        }
+        // 있으면 조회
+        try {
+            List<OtherReview> otherReviews = reviewDao.getOtherReviewsTmp(userIdx); // 좋아요 여부를 제외한 나머지 정보
+            List<GetOtherReviewRes> getOtherReviewsRes = new ArrayList<GetOtherReviewRes>();
+            long otherReviewIdx;
+            int hasLiked;
+            int numOfOtherReviews = otherReviews.size();
+            for(int i = 0; i < numOfOtherReviews; i++) {
+                otherReviewIdx = otherReviews.get(i).getReviewIdx();
+
+                hasLiked = reviewDao.getLikedOrNot(userIdx, otherReviewIdx);
+
+                getOtherReviewsRes.add(new GetOtherReviewRes(otherReviews.get(i).getReviewIdx(), otherReviews.get(i).getEmoji(),
+                        otherReviews.get(i).getText(), otherReviews.get(i).getIsbn(), otherReviews.get(i).getTitle(),
+                        otherReviews.get(i).getThumbnailUrl(), otherReviews.get(i).getAuthor(), hasLiked));
+            }
+            return getOtherReviewsRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
