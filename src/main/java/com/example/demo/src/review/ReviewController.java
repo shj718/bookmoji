@@ -53,31 +53,32 @@ public class ReviewController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             // 형식적 validation
-            if(postReviewReq.getEmoji() == null) {
+            if(postReviewReq.getEmoji() == null || postReviewReq.getEmoji().isEmpty()) {
                 return new BaseResponse<>(EMPTY_EMOJI);
             }
-            if(postReviewReq.getText() == null) {
+            if(postReviewReq.getText() == null || postReviewReq.getText().isEmpty()) {
                 return new BaseResponse<>(EMPTY_REVIEW_TEXT);
             }
-            if(postReviewReq.getIsbn() == null) {
+            if(postReviewReq.getIsbn() == null || postReviewReq.getIsbn().isEmpty()) {
                 return new BaseResponse<>(EMPTY_ISBN);
             }
-            if(postReviewReq.getTitle() == null) {
+            if(postReviewReq.getTitle() == null || postReviewReq.getTitle().isEmpty()) {
                 return new BaseResponse<>(EMPTY_BOOK_TITLE);
             }
-            if(postReviewReq.getThumbnailUrl() == null) {
-                return new BaseResponse<>(EMPTY_THUMBNAIL);
+            if(postReviewReq.getThumbnailUrl() == null || postReviewReq.getThumbnailUrl().isEmpty()) {
+                // 썸네일 없는 책은 디폴트 썸네일 Url 삽입
+                postReviewReq.setThumbnailUrl("https://img.ypbooks.co.kr/ypbooks/images/empty70x100.gif");
             }
-            if(postReviewReq.getAuthor() == null) {
+            if(postReviewReq.getAuthor() == null || postReviewReq.getAuthor().isEmpty()) {
                 return new BaseResponse<>(EMPTY_AUTHOR);
             }
-            if(postReviewReq.getPublisher() == null) {
+            if(postReviewReq.getPublisher() == null || postReviewReq.getPublisher().isEmpty()) {
                 return new BaseResponse<>(EMPTY_PUBLISHER);
             }
-            if(postReviewReq.getIntroduction() == null) {
+            if(postReviewReq.getIntroduction() == null || postReviewReq.getIntroduction().isEmpty()) {
                 return new BaseResponse<>(EMPTY_BOOK_INTRODUCTION);
             }
-            if(postReviewReq.getReleaseYear() == null) {
+            if(postReviewReq.getReleaseYear() == null || postReviewReq.getReleaseYear().isEmpty()) {
                 return new BaseResponse<>(EMPTY_BOOK_RELEASE_YEAR);
             }
             Long reviewIdx = reviewService.createReview(postReviewReq);
@@ -150,10 +151,10 @@ public class ReviewController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             // 형식적 validation
-            if(patchReviewReq.getEmoji() == null) {
+            if(patchReviewReq.getEmoji() == null || patchReviewReq.getEmoji().isEmpty()) {
                 return new BaseResponse<>(EMPTY_EMOJI);
             }
-            if(patchReviewReq.getText() == null) {
+            if(patchReviewReq.getText() == null || patchReviewReq.getText().isEmpty()) {
                 return new BaseResponse<>(EMPTY_REVIEW_TEXT);
             }
             reviewService.modifyReview(patchReviewReq);

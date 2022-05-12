@@ -73,9 +73,19 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyProfileImageQuery, modifyProfileImageParams);
     }
 
-    public int deleteUser(long userIdx) {
-        String deleteUserQuery = "update User set status = 'D' where id = ?";
-        long deleteUserParams = userIdx;
+    public String getUserStatus(long userIdx) {
+        String getUserStatusQuery = "select status from User where id = ?";
+        long getUserStatusParams = userIdx;
+
+        return this.jdbcTemplate.queryForObject(getUserStatusQuery,
+                String.class,
+                getUserStatusParams);
+    }
+
+    public int deleteUser(PatchStatusReq patchStatusReq) {
+        String deleteUserQuery = "update User set status = ? where id = ?";
+        String statusWithQuitReason = "D-" + patchStatusReq.getQuitReason();
+        Object[] deleteUserParams = new Object[]{statusWithQuitReason, patchStatusReq.getUserIdx()};
 
         return this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
     }

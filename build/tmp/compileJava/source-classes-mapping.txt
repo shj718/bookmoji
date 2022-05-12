@@ -38,6 +38,8 @@ com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
 com/example/demo/src/review/ReviewProvider.java
  com.example.demo.src.review.ReviewProvider
+com/example/demo/src/user/model/PatchStatusReq.java
+ com.example.demo.src.user.model.PatchStatusReq
 com/example/demo/src/like/LikeDao.java
  com.example.demo.src.like.LikeDao
 com/example/demo/src/user/UserController.java

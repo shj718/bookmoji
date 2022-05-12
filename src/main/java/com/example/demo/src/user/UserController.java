@@ -144,7 +144,7 @@ public class UserController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             // 형식적 validation
-            if(patchNicknameReq.getNickname() == null) {
+            if(patchNicknameReq.getNickname() == null || patchNicknameReq.getNickname().isEmpty()) {
                 return new BaseResponse<>(PATCH_EMPTY_NICKNAME);
             }
 
@@ -173,10 +173,10 @@ public class UserController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             // 형식적 validation
-            if(patchPasswordReq.getCurrentPassword() == null) {
+            if(patchPasswordReq.getCurrentPassword() == null || patchPasswordReq.getCurrentPassword().isEmpty()) {
                 return new BaseResponse<>(PATCH_EMPTY_CURRENT_PASSWORD);
             }
-            if(patchPasswordReq.getNewPassword() == null) {
+            if(patchPasswordReq.getNewPassword() == null || patchPasswordReq.getNewPassword().isEmpty()) {
                 return new BaseResponse<>(PATCH_EMPTY_NEW_PASSWORD);
             }
 
@@ -205,7 +205,7 @@ public class UserController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             // 형식적 validation
-            if(patchProfileImageReq.getProfileImgUrl() == null) {
+            if(patchProfileImageReq.getProfileImgUrl() == null || patchProfileImageReq.getProfileImgUrl().isEmpty()) {
                 return new BaseResponse<>(EMPTY_PROFILE_IMAGE);
             }
 
@@ -224,15 +224,20 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/account")
-    public BaseResponse<String> deleteUser(@RequestParam long userIdx) {
+    public BaseResponse<String> deleteUser(@RequestBody PatchStatusReq patchStatusReq) {
         try {
+            long userIdx = patchStatusReq.getUserIdx();
             //jwt에서 idx 추출.
             long userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
             if(userIdx != userIdxByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            userService.deleteUser(userIdx);
+            // 형식적 validation
+            if(patchStatusReq.getQuitReason() == null) {
+                patchStatusReq.setQuitReason("");
+            }
+            userService.deleteUser(patchStatusReq);
             String result = "회원 탈퇴 성공";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {

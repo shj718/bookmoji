@@ -157,6 +157,7 @@ public class ReviewDao {
                 "from (select id as reviewIdx, emoji, text, bookId " +
                 "      from Review " +
                 "      where userId != ? " +
+                "        and userId in (select id from User where status = 'A') " +
                 "        and status = 'A') Reviews " +
                 "         inner join (select id, isbn, title, thumbnailUrl, author " +
                 "                     from Book " +

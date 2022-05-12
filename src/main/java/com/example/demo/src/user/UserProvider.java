@@ -49,7 +49,7 @@ public class UserProvider {
         }
         User user = userDao.getPwd(postLoginReq);
         // 탈퇴한 유저인 경우 예외 처리
-        if(user.getStatus().equals("D")) {
+        if(!user.getStatus().equals("A")) {
             throw new BaseException(INVALID_USER_STATUS);
         }
         String password;
@@ -82,6 +82,15 @@ public class UserProvider {
             }
             getUserInfoRes.setPassword(password);
             return getUserInfoRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public String getUserStatus(long userIdx) throws BaseException {
+        try {
+            String result = userDao.getUserStatus(userIdx);
+            return result;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

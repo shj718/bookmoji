@@ -143,9 +143,19 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(long userIdx) throws BaseException {
+    public void deleteUser(PatchStatusReq patchStatusReq) throws BaseException {
+        // 이미 탈퇴한 유저인지 검사
+        String userStatus;
         try {
-            int result = userDao.deleteUser(userIdx);
+            userStatus = userProvider.getUserStatus(patchStatusReq.getUserIdx());
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(!userStatus.equals("A")) {
+            throw new BaseException(DELETE_USER_FAIL);
+        }
+        try {
+            int result = userDao.deleteUser(patchStatusReq);
             if(result == 0) {
                 throw new BaseException(DATABASE_ERROR);
             }

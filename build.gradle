@@ -58,6 +58,9 @@ dependencies {
     // CORS
     testImplementation 'org.apache.httpcomponents:httpclient'
 
+    // Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 test {

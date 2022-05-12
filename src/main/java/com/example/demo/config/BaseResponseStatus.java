@@ -68,6 +68,7 @@ public enum BaseResponseStatus {
     FAILED_TO_DELETE_LIKE(false,3023,"유저가 감상에 공감하지 않았습니다."),
     FAILED_TO_MODIFY_NICKNAME(false,3024,"변경하려는 닉네임이 현재 닉네임과 일치합니다."),
     GET_OTHER_REVIEWS_FAIL(false,3025,"다른 유저들의 감상이 존재하지 않습니다."),
+    DELETE_USER_FAIL(false,3026,"이미 탈퇴한 유저입니다."),
 
 
 
