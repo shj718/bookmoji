@@ -12,3 +12,16 @@ spring:
     password: hyejun1202 # 변경해주세요
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
     # driver-class-name: com.mysql.jdbc.Driver # mysql 5버전
+
+    mail:
+      host: smtp.gmail.com # SMTP 서버 호스트
+      port: 587 # SMTP 서버 포트
+      username: a39345104@gmail.com # SMTP 서버 로그인 아이디 (발신자)
+      password: gnfmdelpzslbdgnh # SMTP 서버 로그인 패스워드 (앱 비밀번호)
+      properties:
+        mail:
+          smtp:
+            auth: true # 사용자 인증 시도 여부 (기본값 : false)
+            timeout: 5000 # Socket Read Timeout 시간(ms) (기본값 : 무한대)
+            starttls:
+              enable: true # StartTLS 활성화 여부 (기본값 : false)

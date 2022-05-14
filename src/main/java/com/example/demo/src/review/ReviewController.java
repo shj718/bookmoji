@@ -70,16 +70,16 @@ public class ReviewController {
                 postReviewReq.setThumbnailUrl("https://img.ypbooks.co.kr/ypbooks/images/empty70x100.gif");
             }
             if(postReviewReq.getAuthor() == null || postReviewReq.getAuthor().isEmpty()) {
-                return new BaseResponse<>(EMPTY_AUTHOR);
+                postReviewReq.setAuthor("N");
             }
             if(postReviewReq.getPublisher() == null || postReviewReq.getPublisher().isEmpty()) {
-                return new BaseResponse<>(EMPTY_PUBLISHER);
+                postReviewReq.setPublisher("N");
             }
             if(postReviewReq.getIntroduction() == null || postReviewReq.getIntroduction().isEmpty()) {
-                return new BaseResponse<>(EMPTY_BOOK_INTRODUCTION);
+                postReviewReq.setIntroduction("N");
             }
             if(postReviewReq.getReleaseYear() == null || postReviewReq.getReleaseYear().isEmpty()) {
-                return new BaseResponse<>(EMPTY_BOOK_RELEASE_YEAR);
+                postReviewReq.setReleaseYear("N");
             }
             Long reviewIdx = reviewService.createReview(postReviewReq);
             return new BaseResponse<>(reviewIdx);

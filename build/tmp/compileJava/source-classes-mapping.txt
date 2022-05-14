@@ -56,6 +56,8 @@ com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/utils/MailService.java
+ com.example.demo.utils.MailService
 com/example/demo/src/like/LikeService.java
  com.example.demo.src.like.LikeService
 com/example/demo/src/user/model/PatchProfileImageReq.java
