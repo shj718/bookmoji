@@ -12,6 +12,8 @@ com/example/demo/src/review/ReviewDao.java
  com.example.demo.src.review.ReviewDao
 com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
+com/example/demo/src/MailConfig.java
+ com.example.demo.src.MailConfig
 com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/user/UserDao.java
@@ -34,6 +36,8 @@ com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
 com/example/demo/src/user/model/PostLoginReq.java
  com.example.demo.src.user.model.PostLoginReq
+com/example/demo/src/user/model/Mail.java
+ com.example.demo.src.user.model.Mail
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
 com/example/demo/src/review/ReviewProvider.java
@@ -56,8 +60,6 @@ com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
-com/example/demo/utils/MailService.java
- com.example.demo.utils.MailService
 com/example/demo/src/like/LikeService.java
  com.example.demo.src.like.LikeService
 com/example/demo/src/user/model/PatchProfileImageReq.java

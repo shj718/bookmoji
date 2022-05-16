@@ -10,10 +10,12 @@ import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
+import java.util.Random;
+
 import javax.transaction.Transactional;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -26,14 +28,14 @@ public class UserService {
     private final UserDao userDao;
     private final UserProvider userProvider;
     private final JwtService jwtService;
-
+    private JavaMailSender javaMailSender;
 
     @Autowired
-    public UserService(UserDao userDao, UserProvider userProvider, JwtService jwtService) {
+    public UserService(UserDao userDao, UserProvider userProvider, JwtService jwtService, JavaMailSender javaMailSender) {
         this.userDao = userDao;
         this.userProvider = userProvider;
         this.jwtService = jwtService;
-
+        this.javaMailSender = javaMailSender;
     }
 
     @Transactional
@@ -161,6 +163,53 @@ public class UserService {
             }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void mailSend(Mail mail) throws BaseException {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(mail.getTo());
+            message.setSubject(mail.getTitle());
+            message.setText(mail.getMessage());
+
+            javaMailSender.send(message);
+        } catch(Exception exception) {
+            exception.printStackTrace();
+            throw new BaseException(MAIL_SEND_ERROR);
+        }
+    }
+
+    @Transactional
+    public String sendAuthMail(String email) throws BaseException {
+        try {
+            String to = email;
+            String title = "북모지(Bookmoji) 이메일 인증 코드";
+            // 8자리 인증 코드 생성하기
+            String authCode = "";
+            Random random = new Random();
+            for(int i=0;i<8;i++) {
+                int x = random.nextInt(3);
+                switch(x) {
+                    case 0:
+                        authCode += (char)(random.nextInt(26) + 97); // a ~ z
+                        break;
+                    case 1:
+                        authCode += (char)(random.nextInt(26) + 65); // A ~ Z
+                        break;
+                    case 2:
+                        authCode += random.nextInt(10); // 0 ~ 9
+                        break;
+                }
+            }
+            String message = "인증 코드는  " + authCode + "  입니다.";
+
+            Mail mail = new Mail(to, title, message);
+            mailSend(mail);
+
+            return authCode;
+        } catch(Exception exception){
+            throw new BaseException(MAIL_SEND_ERROR);
         }
     }
 }

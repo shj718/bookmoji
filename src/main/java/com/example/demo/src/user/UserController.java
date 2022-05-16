@@ -81,7 +81,7 @@ public class UserController {
         }
         //이메일 정규표현
         if(!isRegexEmail(postUserReq.getEmail())){
-            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+            return new BaseResponse<>(USERS_INVALID_EMAIL);
         }
         try{
             Long userIdx = userService.createUser(postUserReq);
@@ -109,13 +109,53 @@ public class UserController {
             }
             //이메일 정규표현
             if(!isRegexEmail(postLoginReq.getEmail())){
-                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+                return new BaseResponse<>(USERS_INVALID_EMAIL);
             }
             // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 중복 이메일 조회 API
+     * [GET] /users/email/duplication
+     * @return BaseResponse<Integer>
+     */
+    @ResponseBody
+    @GetMapping("/email/duplication")
+    public BaseResponse<Integer> checkDuplicateEmail(@RequestParam String email) {
+        try {
+            //이메일 정규표현
+            if(!isRegexEmail(email)){
+                return new BaseResponse<>(USERS_INVALID_EMAIL);
+            }
+            Integer isDuplicate = userProvider.checkEmail(email);
+            return new BaseResponse<>(isDuplicate);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 이메일 인증을 위한 메일 발송 API
+     * [POST] /users/auth/mail
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PostMapping("/auth/mail")
+    public BaseResponse<String> sendAuthMail(@RequestParam String email) {
+        try {
+            //이메일 정규표현
+            if(!isRegexEmail(email)){
+                return new BaseResponse<>(USERS_INVALID_EMAIL);
+            }
+            String authCode = userService.sendAuthMail(email);
+            return new BaseResponse<>(authCode);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 

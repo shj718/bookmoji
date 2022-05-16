@@ -27,7 +27,7 @@ public enum BaseResponseStatus {
 
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
-    POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
+    USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
     POST_USERS_EMPTY_PASSWORD(false,2018,"비밀번호를 입력해주세요."),
     POST_USERS_EMPTY_NICKNAME(false,2019,"닉네임을 입력해주세요."),
@@ -69,6 +69,7 @@ public enum BaseResponseStatus {
     FAILED_TO_MODIFY_NICKNAME(false,3024,"변경하려는 닉네임이 현재 닉네임과 일치합니다."),
     GET_OTHER_REVIEWS_FAIL(false,3025,"다른 유저들의 감상이 존재하지 않습니다."),
     DELETE_USER_FAIL(false,3026,"이미 탈퇴한 유저입니다."),
+    MAIL_SEND_ERROR(false,3027,"이메일 인증 코드 발송 실패"),
 
 
 
