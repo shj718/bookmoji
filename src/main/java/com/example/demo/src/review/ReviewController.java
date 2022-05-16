@@ -209,4 +209,26 @@ public class ReviewController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 리뷰 이모지 통계 조회 API
+     * [GET] /reviews/analysis/emoji
+     * @return BaseResponse<List<GetEmojiPercentageRes>>
+     */
+    @ResponseBody
+    @GetMapping("/analysis/emoji")
+    public BaseResponse<List<GetEmojiPercentageRes>> getEmojiPercentage(@RequestParam long userIdx) {
+        try {
+            //jwt에서 idx 추출.
+            long userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            List<GetEmojiPercentageRes> getEmojiPercentageRes = reviewProvider.getEmojiPercentage(userIdx);
+            return new BaseResponse<>(getEmojiPercentageRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

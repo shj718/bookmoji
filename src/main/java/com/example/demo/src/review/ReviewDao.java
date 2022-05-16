@@ -186,4 +186,18 @@ public class ReviewDao {
                 int.class,
                 getLikedOrNotParams);
     }
+
+    public List<GetEmojiPercentageRes> getEmojiPercentage(long userIdx) {
+        String getEmojiPercentageQuery = "select emoji, round((count(id) / (select count(id) as countAll from Review where status = 'A' and userId = ?)) * 100, 2) as emojiPercentage " +
+                "from Review " +
+                "where status = 'A' and userId = ? " +
+                "group by emoji";
+        Object[] getEmojiPercentageParams = new Object[]{userIdx, userIdx};
+
+        return this.jdbcTemplate.query(getEmojiPercentageQuery,
+                (rs,rowNum) -> new GetEmojiPercentageRes(
+                        rs.getString("emoji"),
+                        rs.getFloat("emojiPercentage")),
+                getEmojiPercentageParams);
+    }
 }

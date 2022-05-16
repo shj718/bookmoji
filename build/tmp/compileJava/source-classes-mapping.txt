@@ -75,6 +75,8 @@ com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/src/user/model/PatchPasswordReq.java
  com.example.demo.src.user.model.PatchPasswordReq
+com/example/demo/src/review/model/GetEmojiPercentageRes.java
+ com.example.demo.src.review.model.GetEmojiPercentageRes
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
 com/example/demo/src/review/ReviewService.java

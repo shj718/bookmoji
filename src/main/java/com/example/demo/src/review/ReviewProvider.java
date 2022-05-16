@@ -147,4 +147,25 @@ public class ReviewProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetEmojiPercentageRes> getEmojiPercentage(long userIdx) throws BaseException {
+        // 유저가 작성한 리뷰가 하나라도 존재하는지 확인
+        int reviewExists;
+        try {
+            reviewExists = checkReview(userIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(reviewExists == 0) { // 없으면 에러
+            throw new BaseException(REVIEW_NOT_EXISTS);
+        }
+
+        try {
+            // 이모지별 퍼센트 조회
+            List<GetEmojiPercentageRes> getEmojiPercentageRes = reviewDao.getEmojiPercentage(userIdx);
+            return getEmojiPercentageRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
