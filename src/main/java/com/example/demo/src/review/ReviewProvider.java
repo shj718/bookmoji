@@ -148,21 +148,30 @@ public class ReviewProvider {
         }
     }
 
-    public List<GetEmojiPercentageRes> getEmojiPercentage(long userIdx) throws BaseException {
-        // 유저가 작성한 리뷰가 하나라도 존재하는지 확인
+    public int checkYearReview(long userIdx, int year) throws BaseException {
+        try {
+            int result = reviewDao.checkYearReview(userIdx, year);
+            return result;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetEmojiPercentageRes> getEmojiPercentage(long userIdx, int year) throws BaseException {
+        // 해당 년도에 유저가 작성한 리뷰가 하나라도 존재하는지 확인
         int reviewExists;
         try {
-            reviewExists = checkReview(userIdx);
+            reviewExists = checkYearReview(userIdx, year);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
         if(reviewExists == 0) { // 없으면 에러
-            throw new BaseException(REVIEW_NOT_EXISTS);
+            throw new BaseException(YEAR_REVIEW_NOT_EXISTS);
         }
 
         try {
             // 이모지별 퍼센트 조회
-            List<GetEmojiPercentageRes> getEmojiPercentageRes = reviewDao.getEmojiPercentage(userIdx);
+            List<GetEmojiPercentageRes> getEmojiPercentageRes = reviewDao.getEmojiPercentage(userIdx, year);
             return getEmojiPercentageRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

@@ -65,6 +65,15 @@ public class ReviewDao {
                 checkReviewParams);
     }
 
+    public int checkYearReview(long userIdx, int year) {
+        String checkYearReviewQuery = "select exists(select id from Review where userId = ? and status = 'A' and year(createdAt) = ?)";
+        Object[] checkYearReviewParams = new Object[]{userIdx, year};
+
+        return this.jdbcTemplate.queryForObject(checkYearReviewQuery,
+                int.class,
+                checkYearReviewParams);
+    }
+
     public List<GetReviewRes> getReviews(long userIdx) {
         String getReviewsQuery = "select Reviews.id as reviewIdx, title, thumbnailUrl, emoji " +
                 "from (select id, emoji, bookId from Review where userId = ? and status = 'A') Reviews " +
@@ -187,12 +196,17 @@ public class ReviewDao {
                 getLikedOrNotParams);
     }
 
-    public List<GetEmojiPercentageRes> getEmojiPercentage(long userIdx) {
-        String getEmojiPercentageQuery = "select emoji, round((count(id) / (select count(id) as countAll from Review where status = 'A' and userId = ?)) * 100, 2) as emojiPercentage " +
+    public List<GetEmojiPercentageRes> getEmojiPercentage(long userIdx, int year) {
+        String getEmojiPercentageQuery = "select emoji, " +
+                "       round((count(id) / " +
+                "              (select count(id) as countAll from Review where status = 'A' and userId = ? and year(createdAt) = ?)) * " +
+                "             100, 2) as emojiPercentage " +
                 "from Review " +
-                "where status = 'A' and userId = ? " +
+                "where status = 'A' " +
+                "  and userId = ? " +
+                "  and year(createdAt) = ? " +
                 "group by emoji";
-        Object[] getEmojiPercentageParams = new Object[]{userIdx, userIdx};
+        Object[] getEmojiPercentageParams = new Object[]{userIdx, year, userIdx, year};
 
         return this.jdbcTemplate.query(getEmojiPercentageQuery,
                 (rs,rowNum) -> new GetEmojiPercentageRes(

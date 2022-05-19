@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import java.time.LocalDate;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
@@ -217,7 +217,7 @@ public class ReviewController {
      */
     @ResponseBody
     @GetMapping("/analysis/emoji")
-    public BaseResponse<List<GetEmojiPercentageRes>> getEmojiPercentage(@RequestParam long userIdx) {
+    public BaseResponse<List<GetEmojiPercentageRes>> getEmojiPercentage(@RequestParam long userIdx, @RequestParam int year) {
         try {
             //jwt에서 idx 추출.
             long userIdxByJwt = jwtService.getUserIdx();
@@ -225,7 +225,12 @@ public class ReviewController {
             if(userIdx != userIdxByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            List<GetEmojiPercentageRes> getEmojiPercentageRes = reviewProvider.getEmojiPercentage(userIdx);
+
+            // year 선택을 안한 경우
+            if(year == 0) {
+                year = LocalDate.now().getYear();
+            }
+            List<GetEmojiPercentageRes> getEmojiPercentageRes = reviewProvider.getEmojiPercentage(userIdx, year);
             return new BaseResponse<>(getEmojiPercentageRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

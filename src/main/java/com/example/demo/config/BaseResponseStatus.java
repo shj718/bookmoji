@@ -70,6 +70,7 @@ public enum BaseResponseStatus {
     GET_OTHER_REVIEWS_FAIL(false,3025,"다른 유저들의 감상이 존재하지 않습니다."),
     DELETE_USER_FAIL(false,3026,"이미 탈퇴한 유저입니다."),
     MAIL_SEND_ERROR(false,3027,"이메일 인증 코드 발송 실패"),
+    YEAR_REVIEW_NOT_EXISTS(false,3028,"해당 년도에 유저가 작성한 감상이 없습니다."),
 
 
 
