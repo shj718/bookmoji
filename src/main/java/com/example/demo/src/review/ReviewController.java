@@ -236,4 +236,31 @@ public class ReviewController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 월별 리뷰 개수 통계 조회 API
+     * [GET] /reviews/analysis/monthly
+     * @return BaseResponse<List<GetMonthlyCountRes>>
+     */
+    @ResponseBody
+    @GetMapping("/analysis/monthly")
+    public BaseResponse<List<GetMonthlyCountRes>> getMonthlyCount(@RequestParam long userIdx, @RequestParam int year) {
+        try {
+            //jwt에서 idx 추출.
+            long userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            // year 선택을 안한 경우
+            if(year == 0) {
+                year = LocalDate.now().getYear();
+            }
+            List<GetMonthlyCountRes> getMonthlyCountRes = reviewProvider.getMonthlyCount(userIdx, year);
+            return new BaseResponse<>(getMonthlyCountRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

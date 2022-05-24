@@ -214,4 +214,18 @@ public class ReviewDao {
                         rs.getFloat("emojiPercentage")),
                 getEmojiPercentageParams);
     }
+
+    public List<GetMonthlyCountRes> getMonthlyCount(long userIdx, int year) {
+        String getMonthlyCountQuery = "select month(createdAt) as month, count(id) as monthlyCount " +
+                "from Review " +
+                "where userId = ? and status = 'A' and year(createdAt) = ? " +
+                "group by month(createdAt)";
+        Object[] getMonthlyCountParams = new Object[]{userIdx, year};
+
+        return this.jdbcTemplate.query(getMonthlyCountQuery,
+                (rs,rowNum) -> new GetMonthlyCountRes(
+                        rs.getInt("month"),
+                        rs.getInt("monthlyCount")),
+                getMonthlyCountParams);
+    }
 }

@@ -177,4 +177,56 @@ public class ReviewProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetMonthlyCountRes> getMonthlyCount(long userIdx, int year) throws BaseException {
+        // 해당 년도에 유저가 작성한 리뷰가 하나라도 존재하는지 확인
+        int reviewExists;
+        try {
+            reviewExists = checkYearReview(userIdx, year);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+        // 해당 년도에 작성한 감상이 아예 없는 경우
+        try {
+            if(reviewExists == 0) {
+                List<GetMonthlyCountRes> getMonthlyCountRes = new ArrayList<GetMonthlyCountRes>();
+                for(int i = 1; i <= 12; i++) { // 1월 ~ 12월
+                    getMonthlyCountRes.add(i - 1, new GetMonthlyCountRes(i, 0));
+                }
+                return getMonthlyCountRes;
+            }
+        } catch (Exception exception) {
+            throw new BaseException(SERVER_ERROR);
+        }
+
+        // 해당 년도에 작성한 감상이 1개 이상인 경우 (감상이 존재하지 않는 달의 데이터도 표시되어야함)
+        try {
+            List<GetMonthlyCountRes> monthlyCountTmp = reviewDao.getMonthlyCount(userIdx, year);
+            // month 저장
+            ArrayList<Integer> month = new ArrayList<>();
+            for(int i = 0; i < monthlyCountTmp.size(); i++) {
+                month.add(monthlyCountTmp.get(i).getMonth());
+            }
+
+            List<GetMonthlyCountRes> getMonthlyCountRes = new ArrayList<GetMonthlyCountRes>();
+
+            for(int i = 1; i <= 12; i++) { // 1월 ~ 12월
+                // i 에 해당하는 달이 monthlyCount 에 포함되어 있는지 검사
+                int monthIdx = month.indexOf(i);
+                if(monthIdx != -1) {
+                    // 있다면 monthlyCount 값을 넣고
+                    getMonthlyCountRes.add(i - 1, new GetMonthlyCountRes(i, monthlyCountTmp.get(monthIdx).getMonthlyCount()));
+                }
+                else {
+                    // 없다면 0을 넣기
+                    getMonthlyCountRes.add(i - 1, new GetMonthlyCountRes(i, 0));
+                }
+            }
+
+            return getMonthlyCountRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

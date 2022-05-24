@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetEmojiPercentageRes {
-    String emoji;
-    float emojiPercentage;
+    private String emoji;
+    private float emojiPercentage;
 }

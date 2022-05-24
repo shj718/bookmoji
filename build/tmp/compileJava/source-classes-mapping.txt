@@ -2,6 +2,8 @@ com/example/demo/src/review/model/PostReviewReq.java
  com.example.demo.src.review.model.PostReviewReq
 com/example/demo/src/like/LikeProvider.java
  com.example.demo.src.like.LikeProvider
+com/example/demo/src/review/model/GetMonthlyCountRes.java
+ com.example.demo.src.review.model.GetMonthlyCountRes
 com/example/demo/src/review/model/GetReviewRes.java
  com.example.demo.src.review.model.GetReviewRes
 com/example/demo/src/user/model/PostUserReq.java
