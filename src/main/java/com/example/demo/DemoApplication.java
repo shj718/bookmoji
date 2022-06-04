@@ -25,7 +25,7 @@ public class DemoApplication {
             private static final long MAX_AGE_SECS = 3600L;
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:3000", "http://localhost:9000")
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000", "http://localhost:9000", "https://bookmoji.netlify.app")
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS") // METHOD 추가
                         .allowedHeaders("*") // 모든 헤더 추가
                         .maxAge(MAX_AGE_SECS);

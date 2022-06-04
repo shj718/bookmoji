@@ -17,7 +17,7 @@ import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
 @RestController
 @RequestMapping("/reviews")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://bookmoji.netlify.app"})
 public class ReviewController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
