@@ -111,4 +111,12 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public long checkKakaoUser(long userIdx) throws BaseException {
+        try {
+            return userDao.checkKakaoUser(userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

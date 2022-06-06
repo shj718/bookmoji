@@ -143,4 +143,13 @@ public class UserDao {
                 long.class,
                 getKakaoUserParams);
     }
+
+    public long checkKakaoUser(long userIdx) {
+        String checkKakaoUserQuery = "select ifnull(kakaoId, 0) as kakaoId from User where id = ?";
+        long checkKakaoUserParams = userIdx;
+
+        return this.jdbcTemplate.queryForObject(checkKakaoUserQuery,
+                long.class,
+                checkKakaoUserParams);
+    }
 }

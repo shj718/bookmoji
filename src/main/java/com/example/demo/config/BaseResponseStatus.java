@@ -45,7 +45,6 @@ public enum BaseResponseStatus {
     EMPTY_BOOK_INTRODUCTION(false,2031,"책 소개를 입력해주세요."),
     EMPTY_BOOK_RELEASE_YEAR(false,2032,"출판 연도를 입력해주세요."),
     EMPTY_ACCESS_TOKEN(false, 2033, "카카오 액세스 토큰을 입력해주세요."),
-    KAKAO_SOCIAL_LOGIN_ERROR(false,2034, "카카오 사용자 정보 받아오기 실패"),
 
 
 
@@ -73,6 +72,8 @@ public enum BaseResponseStatus {
     DELETE_USER_FAIL(false,3026,"이미 탈퇴한 유저입니다."),
     MAIL_SEND_ERROR(false,3027,"이메일 인증 코드 발송 실패"),
     YEAR_REVIEW_NOT_EXISTS(false,3028,"해당 년도에 유저가 작성한 감상이 없습니다."),
+    KAKAO_USER_MODIFY_PASSWORD_FAIL(false,3029,"카카오 소셜로그인 유저는 비밀번호 변경이 불가합니다."),
+    KAKAO_USER_DELETE_FAIL(false,3030,"카카오 소셜로그인 유저는 회원탈퇴가 불가합니다."),
 
 
 
@@ -86,10 +87,11 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
 
 
     // 5000 : 필요시 만들어서 쓰세요
+    KAKAO_SOCIAL_LOGIN_ERROR(false,5000, "카카오 사용자 정보 받아오기 실패");
     // 6000 : 필요시 만들어서 쓰세요
 
 

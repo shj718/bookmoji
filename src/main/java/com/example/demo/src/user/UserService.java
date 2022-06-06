@@ -235,6 +235,17 @@ public class UserService {
 
     @Transactional
     public void modifyPassword(PatchPasswordReq patchPasswordReq) throws BaseException {
+        // 카카오 소셜로그인 회원이면 비밀번호 변경 불가
+        long kakaoId;
+        try {
+            kakaoId = userProvider.checkKakaoUser(patchPasswordReq.getUserIdx());
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(kakaoId != 0) {
+            throw new BaseException(KAKAO_USER_MODIFY_PASSWORD_FAIL);
+        }
+
         String encryptedPassword; // 암호화된 현재 비밀번호
         try {
             long userIdx = patchPasswordReq.getUserIdx();
@@ -293,6 +304,17 @@ public class UserService {
 
     @Transactional
     public void deleteUser(PatchStatusReq patchStatusReq) throws BaseException {
+        // 카카오 소셜로그인 회원이면 회원탈퇴 불가
+        long kakaoId;
+        try {
+            kakaoId = userProvider.checkKakaoUser(patchStatusReq.getUserIdx());
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(kakaoId != 0) {
+            throw new BaseException(KAKAO_USER_DELETE_FAIL);
+        }
+
         // 이미 탈퇴한 유저인지 검사
         String userStatus;
         try {
