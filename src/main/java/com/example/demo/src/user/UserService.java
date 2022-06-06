@@ -203,7 +203,7 @@ public class UserService {
 
             long userIdx;
             PostUserReq postUserReq = new PostUserReq(email, " ", nickname);
-            userIdx = userDao.createUser(postUserReq, defaultProfileImgUrl);
+            userIdx = userDao.createKakaoUser(postUserReq, defaultProfileImgUrl, kakaoId);
             return userIdx;
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);

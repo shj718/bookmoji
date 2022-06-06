@@ -30,6 +30,15 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInserIdQuery,long.class);
     }
 
+    public long createKakaoUser(PostUserReq postUserReq, String defaultProfileImgUrl, long kakaoId) {
+        String createKakaoUserQuery = "insert into User (email, password, nickname, profileImgUrl, kakaoId) VALUES (?,?,?,?,?)";
+        Object[] createKakaoUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getPassword(), postUserReq.getNickname(), defaultProfileImgUrl, kakaoId};
+        this.jdbcTemplate.update(createKakaoUserQuery, createKakaoUserParams);
+
+        String lastInserIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery,long.class);
+    }
+
     public int checkEmail(String email){
         String checkEmailQuery = "select exists(select email from User where email = ? and kakaoId is null)";
         String checkEmailParams = email;
