@@ -1,6 +1,6 @@
 # 📚 북모지 : 이모지으로 표현하는 독서감상
 
-![image](https://user-images.githubusercontent.com/41052126/172013344-09a7458e-c8c6-4562-b42f-f15ad2a952d5.png](https://user-images.githubusercontent.com/90256209/172198211-678e502c-f7e5-40b4-b4e6-5a69f8340ca4.png)
+![image](https://user-images.githubusercontent.com/90256209/172198211-678e502c-f7e5-40b4-b4e6-5a69f8340ca4.png)
 
 ## 👩‍🏫 웹서비스 소개
 
