@@ -40,6 +40,14 @@ public class UserProvider {
         }
     }
 
+    public int checkKakaoEmail(String email, long kakaoId) throws BaseException {
+        try {
+            return userDao.checkKakaoEmail(email, kakaoId);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
         // 존재하지 않는 이메일인 경우 예외 처리
         try {
@@ -92,6 +100,14 @@ public class UserProvider {
             String result = userDao.getUserStatus(userIdx);
             return result;
         } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public long getKakaoUserIdx(String email, long kakaoId) throws BaseException {
+        try {
+            return userDao.getKakaoUserIdx(email, kakaoId);
+        } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }

@@ -13,6 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import java.util.Random;
 
@@ -59,6 +64,148 @@ public class UserService {
             long userIdx = userDao.createUser(postUserReq, defaultProfileImgUrl);
             return userIdx;
         } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public String getKakaoAccessToken (String code) {
+        String access_Token = "";
+        String refresh_Token = "";
+        String reqURL = "https://kauth.kakao.com/oauth/token";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            StringBuilder sb = new StringBuilder();
+            sb.append("grant_type=authorization_code");
+            sb.append("&client_id=ecc8ae173db37a4ffa1683c3499af231"); // TODO REST_API_KEY 입력
+            sb.append("&redirect_uri=https://bookmoji.site/users/oauth/kakao/callback"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&code=" + code);
+            bw.write(sb.toString());
+            bw.flush();
+
+            //결과 코드가 200이라면 성공
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+
+            access_Token = element.getAsJsonObject().get("access_token").getAsString();
+            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
+
+            System.out.println("access_token : " + access_Token);
+            System.out.println("refresh_token : " + refresh_Token);
+
+            br.close();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return access_Token;
+    }
+
+    @Transactional
+    public PostLoginRes kakaoSocialLogin(String token) throws BaseException {
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
+        long kakaoId;
+        String email = "";
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
+
+            //결과 코드가 200이라면 성공
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            //Gson 라이브러리로 JSON파싱
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+
+            kakaoId = element.getAsJsonObject().get("id").getAsLong();
+            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
+            if(hasEmail){
+                email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+            }
+
+            System.out.println("id : " + kakaoId);
+            System.out.println("email : " + email);
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BaseException(KAKAO_SOCIAL_LOGIN_ERROR);
+        }
+
+        // 가입된 카카오회원인지 아닌지 중복 체크 (신규면 회원가입 후 로그인, 아니면 그냥 로그인)
+        try {
+            long userIdx;
+            String jwt;
+
+            if(userProvider.checkKakaoEmail(email, kakaoId) == 0) { // 기존에 카카오로 가입한 이력이 없는 경우 회원가입 진행
+                userIdx = createKakaoUser(email, kakaoId);
+            }
+            else { // 기존에 카카오로 가입한 이력이 있는 경우
+                userIdx = userProvider.getKakaoUserIdx(email, kakaoId);
+            }
+
+            System.out.println("userIdx : " + userIdx);
+            // JWT 발급
+            jwt = jwtService.createJwt(userIdx);
+            System.out.println("jwt : " + jwt);
+
+            return new PostLoginRes(userIdx, jwt);
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Transactional
+    public long createKakaoUser(String email, long kakaoId) throws BaseException {
+        try {
+            // 닉네임은 이메일 앞부분으로 세팅
+            String nickname;
+            nickname = email.substring(0, email.indexOf("@"));
+            // 디폴트 프로필 이미지 세팅
+            String defaultProfileImgUrl = "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png";
+
+            long userIdx;
+            PostUserReq postUserReq = new PostUserReq(email, " ", nickname);
+            userIdx = userDao.createUser(postUserReq, defaultProfileImgUrl);
+            return userIdx;
+        } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }

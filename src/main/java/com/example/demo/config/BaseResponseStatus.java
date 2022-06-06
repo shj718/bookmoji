@@ -44,6 +44,8 @@ public enum BaseResponseStatus {
     EMPTY_PUBLISHER(false,2030,"출판사를 입력해주세요."),
     EMPTY_BOOK_INTRODUCTION(false,2031,"책 소개를 입력해주세요."),
     EMPTY_BOOK_RELEASE_YEAR(false,2032,"출판 연도를 입력해주세요."),
+    EMPTY_ACCESS_TOKEN(false, 2033, "카카오 액세스 토큰을 입력해주세요."),
+    KAKAO_SOCIAL_LOGIN_ERROR(false,2034, "카카오 사용자 정보 받아오기 실패"),
 
 
 

@@ -31,12 +31,22 @@ public class UserDao {
     }
 
     public int checkEmail(String email){
-        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailQuery = "select exists(select email from User where email = ? and kakaoId is null)";
         String checkEmailParams = email;
+
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
                 checkEmailParams);
 
+    }
+
+    public int checkKakaoEmail(String email, long kakaoId) {
+        String checkKakaoEmailQuery = "select exists(select email from User where email = ? and kakaoId = ?)";
+        Object[] checkKakaoEmailParams = new Object[]{email, kakaoId};
+
+        return this.jdbcTemplate.queryForObject(checkKakaoEmailQuery,
+                int.class,
+                checkKakaoEmailParams);
     }
 
     public GetUserInfoRes getUserInfo(long userIdx) {
@@ -114,5 +124,14 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(getPwdByUserIdxQuery,
                 String.class,
                 getPwdByUserIdxParams);
+    }
+
+    public long getKakaoUserIdx(String email, long kakaoId) {
+        String getKakaoUserIdxQuery = "select id from User where email = ? and kakaoId = ? and status = 'A'";
+        Object[] getKakaoUserParams = new Object[]{email, kakaoId};
+
+        return this.jdbcTemplate.queryForObject(getKakaoUserIdxQuery,
+                long.class,
+                getKakaoUserParams);
     }
 }

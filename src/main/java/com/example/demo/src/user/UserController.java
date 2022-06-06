@@ -69,7 +69,6 @@ public class UserController {
     @ResponseBody
     @PostMapping("/signup")
     public BaseResponse<Long> createUser(@RequestBody PostUserReq postUserReq) {
-        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
         if(postUserReq.getEmail() == null) {
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
@@ -100,7 +99,7 @@ public class UserController {
     @PostMapping("/login")
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq){
         try{
-            // TODO: 로그인 값들에 대한 형식적인 validation 처리해주셔야합니다!
+            // 로그인 값들에 대한 형식적인 validation 처리
             if(postLoginReq.getEmail() == null) {
                 return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
             }
@@ -111,7 +110,7 @@ public class UserController {
             if(!isRegexEmail(postLoginReq.getEmail())){
                 return new BaseResponse<>(USERS_INVALID_EMAIL);
             }
-            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+            // Provider 에서 탈퇴한 유저에 대한 validation 처리
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){
@@ -162,9 +161,41 @@ public class UserController {
     /**
      * 소셜로그인(카카오) API
      * [POST] /users/oauth/kakao
-     * @return BaseResponse<String>
+     * @return BaseResponse<PostLoginRes>
      */
+    @ResponseBody
+    @PostMapping("/oauth/kakao")
+    public BaseResponse<PostLoginRes> kakaoSocialLogin(@RequestParam String token) {
+        try {
+            if(token == null) {
+                return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
+            }
+            PostLoginRes postLoginRes = userService.kakaoSocialLogin(token);
+            return new BaseResponse<>(postLoginRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
+    /**
+     * 카카오 callback (카카오 로그인시 정보를 받는 주소)
+     * [GET] /users/oauth/kakao/callback
+     */
+    @ResponseBody
+    @GetMapping("/oauth/kakao/callback")
+    public BaseResponse<PostLoginRes> kakaoCallback(@RequestParam String code) {
+        System.out.println("authorization code : " + code);
+        String accessToken;
+        try {
+            accessToken = userService.getKakaoAccessToken(code);
+            PostLoginRes postLoginRes = userService.kakaoSocialLogin(accessToken);
+            return new BaseResponse<>(postLoginRes);
+        } catch (BaseException exception) {
+            // 에러 메세지 출력
+            System.out.println("소셜 로그인 에러 발생");
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 
     /**
