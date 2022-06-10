@@ -82,4 +82,4 @@
 
 ## 📜 개발 일지
 
-- [노션 바로가기](https://www.notion.so/Book-Emoji-c0eaac2a298d4675841e56f64d6c81f5)
+- [노션 바로가기](https://suave-lamb-470.notion.site/Book-Emoji-c0eaac2a298d4675841e56f64d6c81f5)
