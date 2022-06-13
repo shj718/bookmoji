@@ -173,12 +173,15 @@ public class UserService {
         try {
             long userIdx;
             String jwt;
+            User user = new User();
 
             if(userProvider.checkKakaoEmail(email, kakaoId) == 0) { // 기존에 카카오로 가입한 이력이 없는 경우 회원가입 진행
                 userIdx = createKakaoUser(email, kakaoId);
+                user = userProvider.getKakaoUserIdx(email, kakaoId);
             }
             else { // 기존에 카카오로 가입한 이력이 있는 경우
-                userIdx = userProvider.getKakaoUserIdx(email, kakaoId);
+                user = userProvider.getKakaoUserIdx(email, kakaoId);
+                userIdx = user.getUserIdx();
             }
 
             System.out.println("userIdx : " + userIdx);
@@ -186,7 +189,7 @@ public class UserService {
             jwt = jwtService.createJwt(userIdx);
             System.out.println("jwt : " + jwt);
 
-            return new PostLoginRes(userIdx, jwt);
+            return new PostLoginRes(userIdx, jwt, user.getProfileImgUrl());
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

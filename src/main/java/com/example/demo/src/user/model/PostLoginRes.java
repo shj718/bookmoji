@@ -11,4 +11,5 @@ public class PostLoginRes {
 
     private long userIdx;
     private String jwt;
+    private String profileImgUrl;
 }

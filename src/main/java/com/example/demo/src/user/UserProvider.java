@@ -68,9 +68,10 @@ public class UserProvider {
         }
 
         if(postLoginReq.getPassword().equals(password)){ // 비밀번호 비교
-            long userIdx = userDao.getPwd(postLoginReq).getUserIdx();
+            long userIdx = user.getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
-            return new PostLoginRes(userIdx,jwt);
+            String profileImgUrl = user.getProfileImgUrl();
+            return new PostLoginRes(userIdx, jwt, profileImgUrl);
         }
         else{
             throw new BaseException(FAILED_TO_LOGIN);
@@ -104,7 +105,7 @@ public class UserProvider {
         }
     }
 
-    public long getKakaoUserIdx(String email, long kakaoId) throws BaseException {
+    public User getKakaoUserIdx(String email, long kakaoId) throws BaseException {
         try {
             return userDao.getKakaoUserIdx(email, kakaoId);
         } catch (Exception exception){

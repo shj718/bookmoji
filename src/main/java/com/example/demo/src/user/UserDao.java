@@ -110,7 +110,7 @@ public class UserDao {
     }
 
     public User getPwd(PostLoginReq postLoginReq){
-        String getPwdQuery = "select id, email, password, nickname, status from User where email = ?";
+        String getPwdQuery = "select id, email, password, nickname, status, profileImgUrl from User where email = ?";
         String getPwdParams = postLoginReq.getEmail();
 
         return this.jdbcTemplate.queryForObject(getPwdQuery,
@@ -119,10 +119,9 @@ public class UserDao {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("nickname"),
-                        rs.getString("status")
-                ),
-                getPwdParams
-                );
+                        rs.getString("status"),
+                        rs.getString("profileImgUrl")),
+                getPwdParams);
 
     }
 
@@ -135,12 +134,18 @@ public class UserDao {
                 getPwdByUserIdxParams);
     }
 
-    public long getKakaoUserIdx(String email, long kakaoId) {
-        String getKakaoUserIdxQuery = "select id from User where email = ? and kakaoId = ? and status = 'A'";
+    public User getKakaoUserIdx(String email, long kakaoId) {
+        String getKakaoUserIdxQuery = "select id, email, password, nickname, status, profileImgUrl from User where email = ? and kakaoId = ? and status = 'A'";
         Object[] getKakaoUserParams = new Object[]{email, kakaoId};
 
         return this.jdbcTemplate.queryForObject(getKakaoUserIdxQuery,
-                long.class,
+                (rs,rowNum)-> new User(
+                        rs.getLong("id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("nickname"),
+                        rs.getString("status"),
+                        rs.getString("profileImgUrl")),
                 getKakaoUserParams);
     }
 

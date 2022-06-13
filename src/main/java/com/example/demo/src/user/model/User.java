@@ -13,4 +13,9 @@ public class User {
     private String password;
     private String nickname;
     private String status;
+    private String profileImgUrl;
+
+    public User() {
+
+    }
 }
