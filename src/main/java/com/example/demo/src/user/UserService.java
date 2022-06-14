@@ -60,7 +60,7 @@ public class UserService {
         }
         try{
             // 프로필 이미지 디폴트로 세팅
-            String defaultProfileImgUrl = "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png";
+            String defaultProfileImgUrl = " ";
             long userIdx = userDao.createUser(postUserReq, defaultProfileImgUrl);
             return userIdx;
         } catch (Exception exception) {
@@ -202,7 +202,7 @@ public class UserService {
             String nickname;
             nickname = email.substring(0, email.indexOf("@"));
             // 디폴트 프로필 이미지 세팅
-            String defaultProfileImgUrl = "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png";
+            String defaultProfileImgUrl = " ";
 
             long userIdx;
             PostUserReq postUserReq = new PostUserReq(email, " ", nickname);
