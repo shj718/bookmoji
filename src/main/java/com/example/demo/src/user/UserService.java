@@ -85,8 +85,8 @@ public class UserService {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=ecc8ae173db37a4ffa1683c3499af231"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=https://bookmoji.site/users/oauth/kakao/callback"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&client_id=9d2e5171737c5341662bd9d51b2b634c"); // TODO REST_API_KEY 입력
+            sb.append("&redirect_uri=http://localhost:3000/oauth"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();

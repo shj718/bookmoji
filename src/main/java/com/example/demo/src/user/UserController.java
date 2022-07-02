@@ -165,12 +165,16 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/oauth/kakao")
-    public BaseResponse<PostLoginRes> kakaoSocialLogin(@RequestParam String token) {
+    public BaseResponse<PostLoginRes> kakaoSocialLogin(@RequestParam String authCode) {
         try {
-            if(token == null) {
-                return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
+            if(authCode == null) {
+                return new BaseResponse<>(EMPTY_AUTH_CODE);
             }
-            PostLoginRes postLoginRes = userService.kakaoSocialLogin(token);
+            String accessToken;
+            // 인가 코드로 액세스 토큰 받아오기
+            accessToken = userService.getKakaoAccessToken(authCode);
+            // 액세스 토큰으로 받은 사용자 정보로 소셜로그인 진행
+            PostLoginRes postLoginRes = userService.kakaoSocialLogin(accessToken);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
