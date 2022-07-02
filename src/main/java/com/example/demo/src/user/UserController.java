@@ -166,6 +166,7 @@ public class UserController {
     @ResponseBody
     @PostMapping("/oauth/kakao")
     public BaseResponse<PostLoginRes> kakaoSocialLogin(@RequestParam String authCode) {
+        System.out.println("authorization code : " + authCode);
         try {
             if(authCode == null) {
                 return new BaseResponse<>(EMPTY_AUTH_CODE);
