@@ -28,16 +28,6 @@
   - 회원 탈퇴(이유 선택)
 - 반응형 구현
 
-## 💻 사이트
-
-- 링크 : [북모지 바로가기](https://bookmoji.netlify.app/)
-  <br></br>
-
-## 🎥 시연영상
-
-- 시연영상 : [시연영상 보러가기](https://bookmoji.netlify.app/)
-  <br></br>
-
 ## 📝 문서
 
 - 💾 [api 명세서](https://docs.google.com/spreadsheets/d/1Asdpkb12oqxwLhNLJsmugVRGKjIvmrwlrwA1VUs1asg/edit#gid=183501716)
