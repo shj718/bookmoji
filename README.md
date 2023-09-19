@@ -28,6 +28,9 @@
   - 회원 탈퇴(이유 선택)
 - 반응형 구현
 
+## 🎨 웹 시연 갤러리
+- 🌈[노션 바로가기](https://lizard-bluebell-49f.notion.site/Book-Emoji-6d0a1f9abba3488fabbdc1c302f5e313)
+
 ## 📝 문서
 
 - 💾 [api 명세서](https://docs.google.com/spreadsheets/d/1Asdpkb12oqxwLhNLJsmugVRGKjIvmrwlrwA1VUs1asg/edit#gid=183501716)
@@ -40,8 +43,8 @@
 
 ## 👨‍👩‍👧‍👦 개발인원
 
-- Frontend, Design(브리), [브리 깃허브](https://github.com/jyejyes)
-- Backend(리엘), [리엘 깃허브](https://github.com/shj718)
+- Frontend, Design(브리): [브리 깃허브](https://github.com/jyejyes)
+- Backend(리엘): [리엘 깃허브](https://github.com/shj718)
   <br></br>
 
 ## 👩🏻‍💻 기술 스택
